@@ -15,7 +15,7 @@ export const VideoSphere = ({ videoUrl, visible, onLoaded }) => {
     playsInline: true, // Añade esta línea
   });
   const sphereRef = useRef();
-
+  console.log(texture);
   useGSAP(
     () => {
       const tl = gsap.timeline();
