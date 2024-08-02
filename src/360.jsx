@@ -59,41 +59,30 @@ export default function caApp() {
 
   return (
     <>
-      {!hasInteracted && (
-        <div className="start-button z-[100]">
-          <button onClick={handleStartClick}>Start</button>
-        </div>
-      )}
-      {hasInteracted && (
-        <Canvas className="z-10">
-          <PerspectiveCamera
-            makeDefault
-            ref={cameraRef}
-            position={[0, 0, 500]}
+      <Canvas className="z-10">
+        <PerspectiveCamera makeDefault ref={cameraRef} position={[0, 0, 500]} />
+        <OrbitControls maxDistance={500} />
+
+        {videoUrls.map((videoUrl, index) => (
+          <VideoSphere
+            key={index}
+            videoUrl={videoUrl}
+            visible={visibleIndex === index}
+            onLoaded={() => {
+              if (visibleIndex !== index) setVisibleIndex(index);
+            }}
           />
-          <OrbitControls maxDistance={500} />
+        ))}
 
-          {videoUrls.map((videoUrl, index) => (
-            <VideoSphere
-              key={index}
-              videoUrl={videoUrl}
-              visible={visibleIndex === index}
-              onLoaded={() => {
-                if (visibleIndex !== index) setVisibleIndex(index);
-              }}
-            />
-          ))}
-
-          <Html position={[500, 0, 0]}>
-            <button onClick={() => handlePointClick(1)}>
-              Click Plaza principal
-            </button>
-          </Html>
-          <Html position={[-500, 0, 0]}>
-            <button onClick={() => handlePointClick(0)}>Click parrilla</button>
-          </Html>
-        </Canvas>
-      )}
+        <Html position={[500, 0, 0]}>
+          <button onClick={() => handlePointClick(1)}>
+            Click Plaza principal
+          </button>
+        </Html>
+        <Html position={[-500, 0, 0]}>
+          <button onClick={() => handlePointClick(0)}>Click parrilla</button>
+        </Html>
+      </Canvas>
     </>
   );
 }

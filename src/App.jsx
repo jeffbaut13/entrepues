@@ -41,11 +41,11 @@ function App() {
 
   return (
     <div style={{ position: "relative", width: "100vw", height: "100vh" }}>
-      {/* <Menu
+      <Menu
         refContainer={container}
         handleCerrarMenu={handleCerrarMenu}
         handleOpenMenu={handleOpenMenu}
-      /> */}
+      />
       <CaApp />
     </div>
   );
