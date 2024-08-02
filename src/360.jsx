@@ -7,7 +7,6 @@ import { VideoSphere } from "./components/VideoSphere";
 import { useGSAP } from "@gsap/react";
 import { puntos } from "./helpers/Puntos";
 import { PuntoHover } from "./components/PuntoHover";
-import RotatingGroup from "./helpers/Rotation";
 
 export default function caApp({
   hasInteracted,
@@ -76,30 +75,28 @@ export default function caApp({
           />
           <OrbitControls maxDistance={500} />
 
-          <RotatingGroup>
-            {videoUrls.map((videoUrl, index) => (
-              <VideoSphere
-                key={index}
-                videoUrl={videoUrl}
-                visible={visibleIndex === index}
-                onLoaded={() => {
-                  if (visibleIndex !== index) setVisibleIndex(index);
-                }}
-              />
-            ))}
+          {videoUrls.map((videoUrl, index) => (
+            <VideoSphere
+              key={index}
+              videoUrl={videoUrl}
+              visible={visibleIndex === index}
+              onLoaded={() => {
+                if (visibleIndex !== index) setVisibleIndex(index);
+              }}
+            />
+          ))}
 
-            {puntos.map((punto, index) => (
-              <Html key={index} position={punto.ubicacion3d}>
-                <PuntoHover
-                  handleUbicacion={() => handlePointClick(index)}
-                  img={punto.img}
-                  ubicacion={`${
-                    visibleIndex === index ? "hidden" : ""
-                  } bg-white border-white`}
-                />
-              </Html>
-            ))}
-          </RotatingGroup>
+          {puntos.map((punto, index) => (
+            <Html key={index} position={punto.ubicacion3d}>
+              <PuntoHover
+                handleUbicacion={() => handlePointClick(index)}
+                img={punto.img}
+                ubicacion={`${
+                  visibleIndex === index ? "hidden" : ""
+                } bg-white border-white`}
+              />
+            </Html>
+          ))}
         </Canvas>
       )}
     </>
