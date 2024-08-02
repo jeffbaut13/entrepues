@@ -8,7 +8,12 @@ import * as THREE from "three";
 import { useGSAP } from "@gsap/react";
 
 export const VideoSphere = ({ videoUrl, visible, onLoaded }) => {
-  const texture = useVideoTexture(videoUrl, { start: true });
+  const texture = useVideoTexture(videoUrl, {
+    start: true,
+    crossOrigin: "Anonymous",
+    muted: true, // Añade esta línea
+    playsInline: true, // Añade esta línea
+  });
   const sphereRef = useRef();
 
   useGSAP(
