@@ -74,3 +74,12 @@ button:focus-visible {
 img {
   @apply w-full h-full object-contain;
 }
+
+.mask1 {
+  -webkit-mask-image: url("Entrepues-Loader.png");
+  mask-image: url("Entrepues-Loader.png");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  mask-size: cover;
+  mask-position: center;
+}

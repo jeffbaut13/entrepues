@@ -5,46 +5,54 @@ import gsap from "gsap";
 
 import { VideoSphere } from "./components/VideoSphere";
 import { useGSAP } from "@gsap/react";
-import { Cloudinary } from "@cloudinary/url-gen";
+import { puntos } from "./helpers/Puntos";
+import { PuntoHover } from "./components/PuntoHover";
+import RotatingGroup from "./helpers/Rotation";
 
-export default function caApp() {
-  const [videoUrls, setVideoUrls] = useState([
-    "https://res.cloudinary.com/dhqkfhlnr/video/upload/v1722547253/14.1_q3glpf.mp4",
-    "https://res.cloudinary.com/dhqkfhlnr/video/upload/v1722547241/14_1_pbizs3.mp4",
+export default function caApp({
+  hasInteracted,
+  visibleIndex,
+  setVisibleIndex,
+}) {
+  const [videoUrls] = useState([
+    "https://res.cloudinary.com/dhqkfhlnr/video/upload/v1722633171/video/ehi84pmwdnfmavtgigit.mp4",
+    "https://res.cloudinary.com/dhqkfhlnr/video/upload/v1722633160/video/jwyyaln0ezmj2czz83wb.mp4",
+    "https://res.cloudinary.com/dhqkfhlnr/video/upload/v1722633168/video/xwzr9rzemixlkj7cmtqh.mp4",
+    "https://res.cloudinary.com/dhqkfhlnr/video/upload/v1722633797/video/mkh8vxaupyn2vnbsltgl.mp4",
+    "https://res.cloudinary.com/dhqkfhlnr/video/upload/v1722633163/video/iwu8lwz6tgaf4c4oab3v.mp4",
+    "https://res.cloudinary.com/dhqkfhlnr/video/upload/v1722633136/video/pwar6fkvhadrfreomlng.mp4",
+    "https://res.cloudinary.com/dhqkfhlnr/video/upload/v1722633171/video/cmxtcwwdhuj0dg1kbvh5.mp4",
+    "https://res.cloudinary.com/dhqkfhlnr/video/upload/v1722633159/video/nila8pwfd7fcpf6i7nx9.mp4",
   ]);
-  const [visibleIndex, setVisibleIndex] = useState(0);
-  const [hasInteracted, setHasInteracted] = useState(false); // Estado para detectar interacción del usuario
+
   const cameraRef = useRef();
   const { contextSafe } = useGSAP({ scope: cameraRef });
 
   const handlePointClick = contextSafe((newIndex) => {
-    const tl = gsap.timeline();
-    tl.to(cameraRef.current.position, {
-      x: 0,
-      y: 0,
-      z: 500,
-      duration: 1,
-    });
-
-    tl.to(
-      cameraRef.current.rotation,
-      {
+    if (cameraRef.current) {
+      const tl = gsap.timeline();
+      tl.to(cameraRef.current.position, {
         x: 0,
         y: 0,
-        z: 0,
+        z: 500,
         duration: 1,
-      },
-      "<"
-    );
-    tl.add(() => {
-      setVisibleIndex(newIndex);
-    }, "<");
-  });
+      });
 
-  // Iniciar la reproducción del video tras la interacción del usuario
-  const handleStartClick = () => {
-    setHasInteracted(true);
-  };
+      tl.to(
+        cameraRef.current.rotation,
+        {
+          x: 0,
+          y: 0,
+          z: 0,
+          duration: 1,
+        },
+        "<"
+      );
+      tl.add(() => {
+        setVisibleIndex(newIndex);
+      }, "<");
+    }
+  });
 
   useEffect(() => {
     if (hasInteracted) {
@@ -59,30 +67,41 @@ export default function caApp() {
 
   return (
     <>
-      <Canvas className="z-10">
-        <PerspectiveCamera makeDefault ref={cameraRef} position={[0, 0, 500]} />
-        <OrbitControls maxDistance={500} />
-
-        {videoUrls.map((videoUrl, index) => (
-          <VideoSphere
-            key={index}
-            videoUrl={videoUrl}
-            visible={visibleIndex === index}
-            onLoaded={() => {
-              if (visibleIndex !== index) setVisibleIndex(index);
-            }}
+      {hasInteracted && (
+        <Canvas className="z-10">
+          <PerspectiveCamera
+            makeDefault
+            ref={cameraRef}
+            position={[0, 0, 500]}
           />
-        ))}
+          <OrbitControls maxDistance={500} />
 
-        <Html position={[500, 0, 0]}>
-          <button onClick={() => handlePointClick(1)}>
-            Click Plaza principal
-          </button>
-        </Html>
-        <Html position={[-500, 0, 0]}>
-          <button onClick={() => handlePointClick(0)}>Click parrilla</button>
-        </Html>
-      </Canvas>
+          <RotatingGroup>
+            {videoUrls.map((videoUrl, index) => (
+              <VideoSphere
+                key={index}
+                videoUrl={videoUrl}
+                visible={visibleIndex === index}
+                onLoaded={() => {
+                  if (visibleIndex !== index) setVisibleIndex(index);
+                }}
+              />
+            ))}
+
+            {puntos.map((punto, index) => (
+              <Html key={index} position={punto.ubicacion3d}>
+                <PuntoHover
+                  handleUbicacion={() => handlePointClick(index)}
+                  img={punto.img}
+                  ubicacion={`${
+                    visibleIndex === index ? "hidden" : ""
+                  } bg-white border-white`}
+                />
+              </Html>
+            ))}
+          </RotatingGroup>
+        </Canvas>
+      )}
     </>
   );
 }

@@ -1,10 +1,8 @@
 import React, { useEffect, useRef } from "react";
-
 import gsap from "gsap";
 import { animationSphere } from "../helpers/animations";
 import { useVideoTexture } from "@react-three/drei";
 import * as THREE from "three";
-
 import { useGSAP } from "@gsap/react";
 
 export const VideoSphere = ({ videoUrl, visible, onLoaded }) => {
@@ -15,7 +13,7 @@ export const VideoSphere = ({ videoUrl, visible, onLoaded }) => {
     playsInline: true, // Añade esta línea
   });
   const sphereRef = useRef();
-  console.log(texture);
+
   useGSAP(
     () => {
       const tl = gsap.timeline();
