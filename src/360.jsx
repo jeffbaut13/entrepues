@@ -9,11 +9,7 @@ import { puntos } from "./helpers/Puntos";
 import { PuntoHover } from "./components/PuntoHover";
 import RotatingGroup from "./components/RotatingGroup";
 
-export default function caApp({
-  hasInteracted,
-  visibleIndex,
-  setVisibleIndex,
-}) {
+export default function caApp({ visibleIndex, setVisibleIndex }) {
   const [videoUrls] = useState([
     "https://res.cloudinary.com/dhqkfhlnr/video/upload/v1722633171/video/ehi84pmwdnfmavtgigit.mp4",
   ]);
@@ -47,54 +43,36 @@ export default function caApp({
     }
   });
 
-  useEffect(() => {
-    if (hasInteracted) {
-      const videoElements = document.querySelectorAll("video");
-      videoElements.forEach((video) => {
-        video.muted = true;
-        video.setAttribute("playsInline", "");
-        video.play();
-      });
-    }
-  }, [hasInteracted]);
-
   return (
     <>
-      {hasInteracted && (
-        <Canvas className="z-10">
-          <PerspectiveCamera
-            makeDefault
-            ref={cameraRef}
-            position={[0, 0, 500]}
-          />
-          <OrbitControls maxDistance={500} />
+      <Canvas className="z-10">
+        <PerspectiveCamera makeDefault ref={cameraRef} position={[0, 0, 500]} />
+        <OrbitControls maxDistance={500} />
+        <RotatingGroup>
+          {videoUrls.map((videoUrl, index) => (
+            <VideoSphere
+              key={index}
+              videoUrl={videoUrl}
+              visible={visibleIndex === index}
+              onLoaded={() => {
+                if (visibleIndex !== index) setVisibleIndex(index);
+              }}
+            />
+          ))}
 
-          <RotatingGroup>
-            {videoUrls.map((videoUrl, index) => (
-              <VideoSphere
-                key={index}
-                videoUrl={videoUrl}
-                visible={visibleIndex === index}
-                onLoaded={() => {
-                  if (visibleIndex !== index) setVisibleIndex(index);
-                }}
+          {puntos.map((punto, index) => (
+            <Html key={index} position={punto.ubicacion3d}>
+              <PuntoHover
+                handleUbicacion={() => handlePointClick(index)}
+                img={punto.img}
+                ubicacion={`${
+                  visibleIndex === index ? "hidden" : ""
+                } bg-white border-white`}
               />
-            ))}
-
-            {puntos.map((punto, index) => (
-              <Html key={index} position={punto.ubicacion3d}>
-                <PuntoHover
-                  handleUbicacion={() => handlePointClick(index)}
-                  img={punto.img}
-                  ubicacion={`${
-                    visibleIndex === index ? "hidden" : ""
-                  } bg-white border-white`}
-                />
-              </Html>
-            ))}
-          </RotatingGroup>
-        </Canvas>
-      )}
+            </Html>
+          ))}
+        </RotatingGroup>
+      </Canvas>
     </>
   );
 }

@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { animationSphere } from "../helpers/animations";
-import { useVideoTexture } from "@react-three/drei";
+import { Html, useVideoTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { useGSAP } from "@gsap/react";
+import { PuntoHover } from "./PuntoHover";
 
 export const VideoSphere = ({ videoUrl, visible, onLoaded }) => {
   const texture = useVideoTexture(videoUrl, {
@@ -32,14 +33,23 @@ export const VideoSphere = ({ videoUrl, visible, onLoaded }) => {
   }, [texture]);
 
   return (
-    <mesh ref={sphereRef}>
-      <sphereGeometry args={[500, 60, 40]} />
-      <meshBasicMaterial
-        map={texture}
-        side={THREE.BackSide}
-        transparent
-        opacity={0}
-      />
-    </mesh>
+    <>
+      <mesh ref={sphereRef}>
+        <sphereGeometry args={[500, 60, 40]} />
+        <meshBasicMaterial
+          map={texture}
+          side={THREE.BackSide}
+          transparent
+          opacity={0}
+        />
+      </mesh>
+      <Html position={[500, 0, 0]}>
+        <PuntoHover
+          //handleUbicacion={() => handlePointClick(index)}
+          //img={punto.img}
+          ubicacion={`btn bg-white border-white`}
+        />
+      </Html>
+    </>
   );
 };

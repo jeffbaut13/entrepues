@@ -73,8 +73,6 @@ function App() {
           <CaApp
             visibleIndex={visibleIndex}
             setVisibleIndex={setVisibleIndex}
-            hasInteracted={hasInteracted}
-            setHasInteracted={setHasInteracted}
           />
         </>
       )}

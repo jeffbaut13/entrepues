@@ -6,7 +6,7 @@ const RotatingGroup = ({ children }) => {
 
   useFrame(() => {
     if (groupRef.current) {
-      groupRef.current.rotation.y += 0.001; // Rotar en el eje Y
+      groupRef.current.rotation.y += 0.0003; // Rotar en el eje Y
     }
   });
 
