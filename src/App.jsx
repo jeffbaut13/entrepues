@@ -10,7 +10,7 @@ import Loader from "./components/Loader";
 function App() {
   const [hasInteracted, setHasInteracted] = useState(false); // Estado para detectar interacción del usuario
   const container = useRef();
-  const [visibleIndex, setVisibleIndex] = useState(0);
+  const [visibleIndex, setVisibleIndex] = useState(1);
 
   const { contextSafe } = useGSAP({ scope: container });
 

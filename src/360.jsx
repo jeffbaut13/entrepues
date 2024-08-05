@@ -47,29 +47,21 @@ export default function caApp({ visibleIndex, setVisibleIndex }) {
     <>
       <Canvas className="z-10">
         <PerspectiveCamera makeDefault ref={cameraRef} position={[0, 0, 500]} />
-        <OrbitControls maxDistance={500} />
+        <OrbitControls />
         <RotatingGroup>
-          {videoUrls.map((videoUrl, index) => (
-            <VideoSphere
-              key={index}
-              videoUrl={videoUrl}
-              visible={visibleIndex === index}
-              onLoaded={() => {
-                if (visibleIndex !== index) setVisibleIndex(index);
-              }}
-            />
-          ))}
-
           {puntos.map((punto, index) => (
-            <Html key={index} position={punto.ubicacion3d}>
-              <PuntoHover
-                handleUbicacion={() => handlePointClick(index)}
-                img={punto.img}
-                ubicacion={`${
-                  visibleIndex === index ? "hidden" : ""
-                } bg-white border-white`}
-              />
-            </Html>
+            <>
+              {visibleIndex === index && (
+                <VideoSphere
+                  key={index}
+                  videoUrl={punto.videoUrl}
+                  visible={index}
+                  handleUbicacion={handlePointClick}
+                  img={punto.img}
+                  ubicacion3d={punto.ubicacion3d}
+                />
+              )}
+            </>
           ))}
         </RotatingGroup>
       </Canvas>

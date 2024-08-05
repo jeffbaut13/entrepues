@@ -1,10 +1,9 @@
-export const animationSphere = (visible, tl, onLoaded, sphereRef) => {
+export const animationSphere = (visible, tl, sphereRef) => {
   if (visible) {
     tl.to(sphereRef.current.material, {
       opacity: 1,
       duration: 1,
       ease: "power1.inOut",
-      onComplete: onLoaded,
     });
     tl.from(
       sphereRef.current.scale,

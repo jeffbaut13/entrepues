@@ -5,8 +5,16 @@ import { Html, useVideoTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { useGSAP } from "@gsap/react";
 import { PuntoHover } from "./PuntoHover";
+import { ubicacionPunto } from "../helpers/Puntos";
 
-export const VideoSphere = ({ videoUrl, visible, onLoaded }) => {
+export const VideoSphere = ({
+  videoUrl,
+  visible,
+
+  ubicacion3d,
+  handleUbicacion,
+  img,
+}) => {
   const texture = useVideoTexture(videoUrl, {
     start: true,
     crossOrigin: "Anonymous",
@@ -18,9 +26,9 @@ export const VideoSphere = ({ videoUrl, visible, onLoaded }) => {
   useGSAP(
     () => {
       const tl = gsap.timeline();
-      animationSphere(visible, tl, onLoaded, sphereRef);
+      animationSphere(visible, tl, sphereRef);
     },
-    { scope: sphereRef, dependencies: [visible, onLoaded] }
+    { scope: sphereRef, dependencies: [visible] }
   );
 
   // Invertir coordenadas UV
@@ -32,6 +40,8 @@ export const VideoSphere = ({ videoUrl, visible, onLoaded }) => {
     }
   }, [texture]);
 
+  const puntosUbicaciones = ubicacionPunto[0];
+
   return (
     <>
       <mesh ref={sphereRef}>
@@ -39,17 +49,22 @@ export const VideoSphere = ({ videoUrl, visible, onLoaded }) => {
         <meshBasicMaterial
           map={texture}
           side={THREE.BackSide}
-          transparent
-          opacity={0}
+          //transparent
+          //opacity={0}
         />
       </mesh>
-      <Html position={[500, 0, 0]}>
-        <PuntoHover
-          //handleUbicacion={() => handlePointClick(index)}
-          //img={punto.img}
-          ubicacion={`btn bg-white border-white`}
-        />
-      </Html>
+
+      {puntosUbicaciones[ubicacion3d].map((punto, index) => (
+        <Html key={index} position={punto}>
+          <PuntoHover
+            handleUbicacion={() => handleUbicacion(index)}
+            img={img}
+            ubicacion={`${
+              visible === index ? "hidden" : ""
+            } bg-white border-white`}
+          />
+        </Html>
+      ))}
     </>
   );
 };
